@@ -74,7 +74,30 @@ def print_table(order):
     # If the argument is "count,asc"
     if order == "count,asc":
         inv_list = list(inv.items())
-
+        inv_list = list(inv.items())
+        i = 0
+        while i in range(len(inv_list)-1):
+            if inv_list[i][1] > inv_list[i+1][1]:
+                temp = inv_list[i]
+                inv_list[i] = inv_list[i+1]
+                inv_list[i+1] = temp
+                if i > 0:
+                    i -= 1
+                else:
+                    i = 0
+            else:
+                i += 1
+                continue
+        print("Inventory:")
+        print(" "*2 + "count" + " "*4 + "item name")
+        print("-"*20)
+        for i in range(len(inv_list)):
+            num_of_front_space = 7 - len(str(inv_list[i][1]))
+            num_of_mid_space = 20 - num_of_front_space - len(str(inv_list[i][1])) - len(inv_list[i][0])
+            print(" "*num_of_front_space + str(inv_list[i][1]) + " "*num_of_mid_space + str(inv_list[i][0]))
+            total += inv_list[i][1]
+        print("-"*20)
+        print("Total number of items:", total)
 
 
 # def import_inventory(filename):
@@ -89,6 +112,7 @@ def print_table(order):
 inv = add_to_inventory(inv, dragon_loot)
 # display_inventory(inv)
 # order = None
-order = "count,desc"
+# order = "count,desc"
+order = "count,asc"
 
 print_table(order)
