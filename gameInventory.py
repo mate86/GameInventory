@@ -1,4 +1,5 @@
 # Mate Balazs, 2016, Codecool
+import random
 
 # ========== Global variables ==========
 
@@ -130,10 +131,94 @@ def export_inventory(filename = "export_inventory.csv"):
         file.write("\n" + str(key) + "," + str(value))          # Writes the items to the file, separated with comma
     file.close()
 
+def attack(enemy):
+    global inv
+    result = random.randint(1,10)
+    if result > 3:
+        try:                                                        # Try to open the file
+            file = open(enemy, "r")
+            file_list = file.read().splitlines()                    # Creates a list from the file lines without newline character
+            file.close()
+        except:                                                     # If file does not exist, throws an exception, then quits
+            print("Error! File ('" + str(filename) + "') does not exist!")
+            quit()
+        
+        file_element = []
+
+        for i in range(1,len(file_list)):                           # Puts te lines into a two dimensional list without the first line
+            file_element.append(file_list[i].split(","))            # Splits the lines at the comma
+
+        del file_list
+
+        for i in range(len(file_element)):                          # Converts the value from 'str' to 'int'
+            file_element[i][1] = int(file_element[i][1])
+        
+        for i in range(len(file_element)):
+            if file_element[i][0] not in inv:                       # If the element is not in the inventory...
+                inv[file_element[i][0]] = file_element[i][1]        # ...let add it
+            else:
+                inv[file_element[i][0]] += file_element[i][1]
+
+        print("You won the battle!")
+        print("-"*20)
+        print("Your reward is:")
+        for i in range(len(file_element)):
+            front_space = 7 - len(str(file_element[i][1]))
+            mid_space = 20 - front_space - len(str(file_element[i][1])) - len(file_element[i][0])
+            print(" "*front_space + str(file_element[i][1]) + " "*mid_space + str(file_element[i][0]))
+        print("-"*20)
+        display_inventory(inv)
+        print("-"*20)
+    else:
+        print("You are died!")
+        quit()
+
+def main():
+    global inv
+    inv = add_to_inventory(inv, dragon_loot)
+    import_inventory()
+    command = "f"
+    while True:
+        if command == "f":
+            print("You are in the forest. Where do you want to go?")
+            command = input("To the cave ('c'), to the lake ('l'), to the mountains ('m') or quit ('q'): ")
+        if command == "c":
+            print("You are in the cave. A barbarian attacks you!")
+            attack("barbarian.csv")
+            print("Where do you want to go?")
+            command = input("To the forest ('f'), to the lake ('l'), to the mountains ('m') or quit ('q'): ")
+        if command == "l":
+            print("You are at the lake. An ork attacks you!")
+            attack("ork.csv")
+            print("Where do you want to go?")
+            command = input("To the cave ('c'), to the forest ('f'), to the mountains ('m') or quit ('q'): ")
+        if command == "m":
+            print("You are in the mountains. A wolf attacks you!")
+            attack("wolf.csv")
+            print("Where do you want to go?")
+            command = input("To the cave ('c'), to the lake ('l'), to the forest ('f') or quit ('q'): ")
+        if command == "q":
+            quit()
+        # else:
+        #     print("Invalid command!")
+        #     continue
+
+
+
 # ========== Main ==========
 
-inv = add_to_inventory(inv, dragon_loot)
-# display_inventory(inv)
-import_inventory()
+# inv = add_to_inventory(inv, dragon_loot)
+# # display_inventory(inv)
+# import_inventory()
+# attack("enemy.csv")
+# print_table()
+
+# command = input("Please add an order command ('count,desc' or 'count,asc'):")
+# if command == "count,desc":
+#     print_table(command)
+# if command == "count,asc":
+#     print_table(command)
+# else:
+#     print_table()
+main()
 export_inventory()
-print_table()
