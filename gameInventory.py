@@ -169,56 +169,51 @@ def attack(enemy):
         print("-"*20)
         display_inventory(inv)
         print("-"*20)
+        export_inventory()
     else:
         print("You are died!")
+        print_table("count,desc")
+        export_inventory()
         quit()
 
 def main():
     global inv
-    inv = add_to_inventory(inv, dragon_loot)
+    inv = add_to_inventory(inv, dragon_loot)                    # Calls the mandatory functions :)
     import_inventory()
     command = "f"
     while True:
         if command == "f":
             print("You are in the forest. Where do you want to go?")
             command = input("To the cave ('c'), to the lake ('l'), to the mountains ('m') or quit ('q'): ")
+            continue
         if command == "c":
             print("You are in the cave. A barbarian attacks you!")
             attack("barbarian.csv")
             print("Where do you want to go?")
             command = input("To the forest ('f'), to the lake ('l'), to the mountains ('m') or quit ('q'): ")
+            continue
         if command == "l":
             print("You are at the lake. An ork attacks you!")
             attack("ork.csv")
             print("Where do you want to go?")
             command = input("To the cave ('c'), to the forest ('f'), to the mountains ('m') or quit ('q'): ")
+            continue
         if command == "m":
             print("You are in the mountains. A wolf attacks you!")
             attack("wolf.csv")
             print("Where do you want to go?")
             command = input("To the cave ('c'), to the lake ('l'), to the forest ('f') or quit ('q'): ")
+            continue
         if command == "q":
+            export_inventory()
             quit()
-        # else:
-        #     print("Invalid command!")
-        #     continue
-
-
+        else:
+            print("Invalid command!")
+            print("Where do you want to go?")
+            command = input("To the forest ('f'), to the cave ('c'), to the lake ('l'), to the forest ('f') or quit ('q'): ")
+    
+    export_inventory()
 
 # ========== Main ==========
 
-# inv = add_to_inventory(inv, dragon_loot)
-# # display_inventory(inv)
-# import_inventory()
-# attack("enemy.csv")
-# print_table()
-
-# command = input("Please add an order command ('count,desc' or 'count,asc'):")
-# if command == "count,desc":
-#     print_table(command)
-# if command == "count,asc":
-#     print_table(command)
-# else:
-#     print_table()
 main()
-export_inventory()
